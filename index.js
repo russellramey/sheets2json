@@ -97,14 +97,14 @@ const parseColumns = (data) => {
     if(data.table.parsedNumHeaders){
         // Map table columns to new array
         cols = data.table.cols.map((col, index) => {
-            return (col.label) ? col.label.replace(/ /g, '_').replace(/-/g, '_') : col.id
+            return (col.label) ? col.label.replace(/ /g, '_').replace(/-/g, '_') : "Column_" + (index+1)
         });
     } else {
         // If no rows array
         if(!data.table.rows) return false;
         // Map first element of table rows array to new array
         cols = data.table.rows[0].c.map((col, index) => {
-            return (col.v) ? col.v.replace(/ /g, '_').replace(/-/g, '_') : index
+            return (col && col.v) ? col.v.replace(/ /g, '_').replace(/-/g, '_') : "Column_" + (index+1)
         });
     }
     // Return cols array
