@@ -25,5 +25,24 @@ There are three(3) supported query parameters for the above endpoint:
 - `order`: supports `asc`(default) and `desc`. Order results in ascending or descending order.
 - `sheet`: sheet name of desired sheet in Google Sheet document. If no `sheet` specified, the first sheet in the document will be used.
 
+### Response
+Returns JSON array of rows in the document. The `keys` of each item in the array will be that of the first available row from the document. Each item in the array is a single row with `key` / `value` pairs. 
+```JSON
+[
+    {
+        "column_label_1":"row value 1",
+        "column_label_2":"row value 2",
+        "column_label_3":"row value 3",
+        ...
+    },
+    {
+        "column_label_1":"row value 1",
+        "column_label_2":"row value 2",
+        "column_label_3":"row value 3",
+        ...
+    }
+]
+```
+
 ## Disclaimer
 This service requires the target Google Sheet document be publicly accessible, meaning the data contained within the document, as well as the document ID, could be exposed to the internet without requiring user authentication to access. If you want to keep the Google Sheet data private, DO NOT USE it with this service. 
