@@ -51,7 +51,7 @@ const createJson = (data, headers=null) => {
                 // For each header in array
                 headers.forEach((header, index) => {
                     // Format header
-                    header = header.replace(' ', '_').replace('-', '_').toLowerCase();
+                    header = String(header).replace(' ', '_').replace('-', '_').toLowerCase();
                     // Create new item with header value and item value
                     newItem[header] = (item[index] ? item[index] : null)
                 })
