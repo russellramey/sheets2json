@@ -5,6 +5,43 @@ const https = require("https");
 const URL = require('url');
 
 /**
+ * Create Json
+ * Build json array from data and header array
+ * @param Array - data
+ * @param Array - headers
+ * @return Array
+ */
+ const createJson = (data, headers=null) => {
+    // Json body
+    let json = []
+    // Foreach item in data array
+    data.forEach((item) => {
+        // If item is not empty
+        if(item.length > 0){
+            // If headers exists
+            if(headers){
+                 // New item object
+                let newItem = {}
+                // For each header in array
+                headers.forEach((header, index) => {
+                    // Format header
+                    header = parseHeaders(String(header));
+                    // Create new item with header value and item value
+                    newItem[header] = (item[index] ? item[index] : null)
+                })
+                // Push new item to json body
+                json.push(newItem);
+            } else {
+                // Push raw item to json body
+                json.push(item);
+            }
+        }
+    });
+    // Return json
+    return json;
+}
+
+/**
  * Sort Array
  * Sort array based on provided params of data array, and key
  * @param Array - data
@@ -31,22 +68,22 @@ const URL = require('url');
  * Order data
  * Order data array based on provided params
  * @param Array - data
- * @param Object - params
+ * @param Object - options
  * @return Object
  */
-const orderData = (data, params) => {
+const orderData = (data, options) => {
     // If no data
     if(!data) return false;
     // If order query params exist
-    if(params.orderby || params.order){
+    if(options.orderby || options.order){
         // Reverse variable
         let reverse;
         // Parse provided params, set reversse accordingly
-        if(!params.order) reverse = false;
-        if(params.order === 'asc') reverse = false;
-        if(params.order === 'desc') reverse = true;
+        if(!options.order) reverse = false;
+        if(options.order === 'asc') reverse = false;
+        if(options.order === 'desc') reverse = true;
         // Sort data based off params
-        data = sortArray(data, params.orderby, reverse);
+        data = sortArray(data, options.orderby, reverse);
     }
     // Return data
     return data;
@@ -59,7 +96,7 @@ const orderData = (data, params) => {
  * @return String
  */
 const parseHeaders = (headers) => {
-    return headers.replace(/ /g, '_').replace(/-/g, '_').replace(/(<([^>]+)>)/gi, "").split(',');
+    return String(headers).toLocaleLowerCase().replace(/ /g, '_').replace(/-/g, '_').replace(/(<([^>]+)>)/gi, "").split(',');
 }
 
 /**
@@ -81,6 +118,7 @@ const parseUrl = (url) => {
  * Export module
  */
 module.exports = {
+    createJson,
     orderData,
     parseHeaders,
     parseUrl

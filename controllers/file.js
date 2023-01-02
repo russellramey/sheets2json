@@ -31,42 +31,6 @@ const parseFile = (data, target=null) => {
 }
 
 /**
- * Create Json
- * Build json array from data array
- * @param Array - data
- * @param Array - headers
- * @return Array
- */
-const createJson = (data, headers=null) => {
-    // Json body
-    let json = []
-    // Foreach item in data array
-    data.forEach((item) => {
-        // If item is not empty
-        if(item.length > 0){
-            // If headers exists
-            if(headers){
-                 // New item object
-                let newItem = {}
-                // For each header in array
-                headers.forEach((header, index) => {
-                    // Format header
-                    header = String(header).replace(' ', '_').replace('-', '_').toLowerCase();
-                    // Create new item with header value and item value
-                    newItem[header] = (item[index] ? item[index] : null)
-                })
-                // Push new item to json body
-                json.push(newItem);
-            } else {
-                json.push(item);
-            }
-        }
-    });
-    // Return json
-    return json;
-}
-
-/**
  * File Request v1
  * Main controller function to handle api requests for remote file url.
  * @param Object - request
@@ -110,7 +74,7 @@ const createJson = (data, headers=null) => {
                 }
 
                 // Build custom json object
-                data = createJson(data, headers);
+                data = utilities.createJson(data, headers);     
 
                 // Order/sort data
                 data = utilities.orderData(data, {

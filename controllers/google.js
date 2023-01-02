@@ -31,40 +31,6 @@ const utilities = require('../modules/utilities');
     }
 }
 /**
- * Create JSON
- * Create new json object using rows and columns array
- * Columns as json keys, Rows as json values
- * @param Array - cols 
- * @param Array - rows
- * @return Array
- */
- const createJson = (cols, rows) => {
-    // Arguments exists and valid
-    if(!cols || !rows) return false;
-    // new array 
-    let arr = [];
-    // For each row
-    rows.forEach(row => {
-        // Create new object
-        let obj = {}
-        // For each column
-        cols.forEach((col, index) => {
-            // If row is not null
-            if(row[index]){
-                // Add column label to object
-                // Set value to row[index] value
-                obj[col] = row[index].v
-            } else {
-                obj[col] = null
-            }
-        })
-        // Push to json
-        arr.push(obj)
-    })
-    // Return array
-    return arr;
-}
-/**
  * Create columns array
  * Sperate and prepare column values from data object
  * @param Object
@@ -74,22 +40,14 @@ const parseColumns = (data) => {
     // Arguments exists and valid
     if(!data || !data.table) return false;
     // Column array
-    let cols;
+    let cols = [];
     // If parsed headers
     if(data.table.parsedNumHeaders){
         // Map table columns to new array
         cols = data.table.cols.map((col, index) => {
             return (col.label) ? String(col.label).replace(/ /g, '_').replace(/-/g, '_') : "Column_" + (index+1)
         });
-    } else {
-        // If no rows array
-        if(!data.table.rows) return false;
-        // Map first element of table rows array to new array
-        cols = data.table.rows[0].c.map((col, index) => {
-            //return (col && col.v) ? String(col.v).replace(/ /g, '_').replace(/-/g, '_') : "Column_" + (index+1)
-            return "column_" + (index+1)
-        });
-    }
+    } 
     // Return cols array
     return cols; 
 }
@@ -104,15 +62,14 @@ const parseRows = (data) => {
     if(!data || !data.table) return false;
     // Parse rows to new array
     let rows = data.table.rows.map((row) => row.c );
-    // If no parsed headers from data
-    if(data.table.parsedNumHeaders < 0){
-        // Remove first element in rows array
-        rows.shift();
-    }
+    // Map new rows array
+    rows = rows.map(row => {
+        row = row.map((obj) => (obj ? obj.v : null));
+        return row;
+    })
     // Return rows array
     return rows;
 }
-
 /**
  * Build Google Url
  * Create Google Doc endpoint for provided sheet
@@ -163,19 +120,25 @@ const createUrl = (url) => {
                 // Split sting at new lines
                 data = strToJson(data);
                 
-                // Parse headers parameter as columns
-                let headers = request.query.headers;
-                if(headers && headers !== '1') {
-                    headers = utilities.parseHeaders(headers);
-                } else {
-                    headers = parseColumns(data);
-                }
-                
                 // Parse rows array
                 let rows = parseRows(data);
+                // Parse cols array
+                let cols = parseColumns(data);
+                // Combine cols and rows into new data array
+                data = (cols.length > 0 ? [cols, ...rows] : rows);
+
+                // Parse headers parameter as columns
+                let headers = request.query.headers;
+                if(headers && headers == '1') {
+                    headers = data[0];
+                    data.shift()
+                }
+                else if(headers) {
+                    headers = utilities.parseHeaders(headers);
+                }
                 
                 // Return new json object
-                data = createJson(headers, rows);     
+                data = utilities.createJson(data, headers);     
                 
                 // Order/sort data
                 data = utilities.orderData(data, {
