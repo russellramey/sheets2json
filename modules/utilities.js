@@ -2,16 +2,17 @@
  * Dependencies
  */
 const https = require("https");
+const URL = require('url');
 
 /**
- * Sort data
- * Sort data array based on provided params
+ * Sort Array
+ * Sort array based on provided params of data array, and key
  * @param Array - data
  * @param String - key
  * @param Boolean - reverse 
  * @return Object
  */
- const sortData = (data, key, reverse=false) => {
+ const sortArray = (data, key, reverse=false) => {
     if(key){
        // Sort object by key 
        data.sort((a, b) => {
@@ -26,15 +27,61 @@ const https = require("https");
     return data;
 }
 
+/**
+ * Order data
+ * Order data array based on provided params
+ * @param Array - data
+ * @param Object - params
+ * @return Object
+ */
+const orderData = (data, params) => {
+    // If no data
+    if(!data) return false;
+    // If order query params exist
+    if(params.orderby || params.order){
+        // Reverse variable
+        let reverse;
+        // Parse provided params, set reversse accordingly
+        if(!params.order) reverse = false;
+        if(params.order === 'asc') reverse = false;
+        if(params.order === 'desc') reverse = true;
+        // Sort data based off params
+        data = sortArray(data, params.orderby, reverse);
+    }
+    // Return data
+    return data;
+}
+
+/**
+ * Parse headers
+ * Parse headers url parameter
+ * @param String - headers
+ * @return String
+ */
 const parseHeaders = (headers) => {
     return headers.replace(/ /g, '_').replace(/-/g, '_').replace(/(<([^>]+)>)/gi, "").split(',');
 }
 
+/**
+ * Parse url
+ * Parse url to determin the domain host and other url properties.
+ * @param String - url
+ * @return Object
+ */
+const parseUrl = (url) => {
+    // If no url return false
+    if(!url) return false;
+    // Parse url
+    let urlObj = URL.parse(url);
+    // Return data
+    return (urlObj.host ? urlObj : false);
+}
 
 /**
  * Export module
  */
 module.exports = {
-    sortData,
-    parseHeaders
+    orderData,
+    parseHeaders,
+    parseUrl
 }

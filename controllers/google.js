@@ -114,19 +114,31 @@ const parseRows = (data) => {
 }
 
 /**
+ * Build Google Url
+ * Create Google Doc endpoint for provided sheet
+ * @param String - url
+ * @return String
+ */
+const createUrl = (url) => {
+    // Attempt to get sheet ID from provided url
+    let sheetID = url.split('https://docs.google.com/spreadsheets/d/')[1].split('/edit')[0]; 
+    // Build new endpoint with sheet ID for json resource   
+    let endpoint = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+    // Return endpoint
+    return endpoint;
+}
+
+/**
  * Google Request v1
- * Main controller function to handle api requests
+ * Main controller function to handle api requests for google document url.
  * @param Object - request
  * @param Object - response
  * @return response
  */
- const GoogleRequest_v1 = (request, response) => {
-    
-    // If no sheet id
-    if(!request.params.sheetid ) return response.status(400).json({ error: true, message: 'Valid publicly accessible Sheet ID required.' });
+ const getDocument_v1 = (request, response) => {
 
     // Set url, with request parameters
-    let url = `https://docs.google.com/spreadsheets/d/${request.params.sheetid}/gviz/tq?tqx=out:json&sheet=${(request.query.sheet ? request.query.sheet : 0)}`
+    let url = createUrl(request.query.url) + '&sheet=' + (request.query.sheet ? request.query.sheet : 0);
     
     // Make http request to google docs
     https.get(url, (resp) => {
@@ -144,7 +156,7 @@ const parseRows = (data) => {
         resp.on('end', () => {
 
             // If response is not successfull
-            if(resp.statusCode !== 200) return response.status(400).json({ error: true, message: 'Valid publicly accessible Sheet ID required.' }); 
+            if(resp.statusCode !== 200) return response.status(400).json({ error: true, message: 'Valid publicly accessible Google Sheet required.' }); 
 
             // Try to parse data
             try{
@@ -165,16 +177,11 @@ const parseRows = (data) => {
                 // Return new json object
                 data = createJson(headers, rows);     
                 
-                // If order query params exist
-                if(request.query.orderby || request.query.order){
-                    // Reverse variable
-                    let reverse;
-                    if(!request.query.order) reverse = false;
-                    if(request.query.order === 'asc') reverse = false;
-                    if(request.query.order === 'desc') reverse = true;
-                    // Sort data based off params
-                    data = utilities.sortData(data, request.query.orderby, reverse);
-                }
+                // Order/sort data
+                data = utilities.orderData(data, {
+                    order: request.query.order,
+                    orderby: request.query.orderby
+                })
 
                 // Return new respones
                 return response.status(200).json(data);
@@ -182,7 +189,6 @@ const parseRows = (data) => {
             // Catch any errors
             catch (e){
                 // Return error
-                console.log(e.body)
                 return response.status(400).json({ error: true, message: e.message });
             }            
 
@@ -202,5 +208,5 @@ const parseRows = (data) => {
  * Export module
  */
  module.exports = {
-    GoogleRequest_v1
+    getDocument_v1
 }

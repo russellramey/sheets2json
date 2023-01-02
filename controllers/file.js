@@ -68,12 +68,12 @@ const createJson = (data, headers=null) => {
 
 /**
  * File Request v1
- * Main controller function to handle api requests
+ * Main controller function to handle api requests for remote file url.
  * @param Object - request
  * @param Object - response
  * @return response
  */
-  const FileRequest_v1 = (request, response) => {
+  const getDocument_v1 = (request, response) => {
 
     // If no url parameter
     let url = request.query.url;
@@ -112,16 +112,11 @@ const createJson = (data, headers=null) => {
                 // Build custom json object
                 data = createJson(data, headers);
 
-                // If order query params exist
-                if(request.query.orderby || request.query.order){
-                    // Reverse variable
-                    let reverse;
-                    if(!request.query.order) reverse = false;
-                    if(request.query.order === 'asc') reverse = false;
-                    if(request.query.order === 'desc') reverse = true;
-                    // Sort data based off params
-                    data = utilities.sortData(data, request.query.orderby, reverse);
-                }
+                // Order/sort data
+                data = utilities.orderData(data, {
+                    order: request.query.order,
+                    orderby: request.query.orderby
+                })
                 
                 // Return response
                 return response.status(200).json(data);
@@ -146,5 +141,5 @@ const createJson = (data, headers=null) => {
   * Export module
   */
   module.exports = {
-    FileRequest_v1
+    getDocument_v1
  }

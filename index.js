@@ -6,6 +6,7 @@
 const express = require("express");
 const GoggleController = require('./controllers/google');
 const FileController = require('./controllers/file');
+const utilities = require('./modules/utilities');
 
 /************************************
 *
@@ -25,10 +26,38 @@ app.use([
 * App Routes
 *
 ************************************/
-// Google doc/sheetid
-app.get("/v1/doc/:sheetid/", GoggleController.GoogleRequest_v1);
-// File url (xlsx, csv)
-app.get("/v1/file", FileController.FileRequest_v1);
+// Get Document
+app.get("/v1/doc", (request, response) => {
+
+    // If no url parameter
+    let url = request.query.url;
+    if(!url) return response.status(400).json({ error: true, message: '[url] parameter with full path to remote document required.' });
+
+    try{
+
+        // Parse url parameter
+        url = utilities.parseUrl(request.query.url);
+        if(!url) return response.status(400).json({ error: true, message: 'Valid url required for [url] parameter.' });
+
+        // If url host is Google
+        if(url.host.includes('docs.google.com')){
+            // Request document via Google Controller
+            GoggleController.getDocument_v1(request, response);
+        } 
+        else {
+            // Request document via File Controller
+            FileController.getDocument_v1(request, response)
+        }
+        
+    }
+    catch (e){
+
+        // Return error
+        return response.status(400).json({ error: true, message: e.message }); 
+
+    }
+
+});
 
 /************************************
 *
