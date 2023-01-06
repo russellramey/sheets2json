@@ -35,8 +35,9 @@ There are five(5) supported query parameters for the above endpoint:
 
 ### Response
 Returns JSON array of rows in the document. Each item in the array is an array with the values of each row from the document. To return an array of rows with `key`/`value` objects, you can pass in the `headers` parameter. By default, with `headers` set to `1`, the first item in the array will be used as the  `keys` for all other items in the array.
+
+##### Default Response
 ```JSON
-// Default response
 [
     [
         "row 1 value 1",
@@ -52,8 +53,9 @@ Returns JSON array of rows in the document. Each item in the array is an array w
     ],
     ...
 ]
-
-// Response with [headers=1]
+```
+##### Response with `headers` set to `1`
+```JSON
 [
     {
         "row_1_value_1":"row 2 value 1",
@@ -69,8 +71,10 @@ Returns JSON array of rows in the document. Each item in the array is an array w
     }
     ...
 ]
+```
 
-// Response with [headers=key1,key2,key3]
+##### Response with `headers` set to `key1,key2,key3`
+```JSON
 [
     {
         "key1":"row 1 value 1",
