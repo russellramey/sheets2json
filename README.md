@@ -1,5 +1,5 @@
-# SheetsProxy
-Simple application that provides a read-only REST endpoint for any publicly accessible Google Sheet, .xlsx/.xls, or .csv document. This api will attempt to return the provided Sheet data in structured JSON.
+# Sheets2Json
+Simple application that provides a read-only REST endpoint for any publicly accessible Google Sheet, .xlsx/.xls, or .csv document. This api will attempt to return the provided Sheet data in structured JSON. Pass in any remote document or Google Sheet url and recieve a structured JSON response.
 
 ## Requirements 
 - Node
