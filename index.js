@@ -4,6 +4,7 @@
 *
 ************************************/
 const express = require("express");
+const cors = require("cors");
 const GoggleController = require('./controllers/google');
 const FileController = require('./controllers/file');
 const utilities = require('./modules/utilities');
@@ -18,7 +19,8 @@ const app = express();
 // Here we are configuring express to use body-parser as middle-ware.
 app.use([
     express.urlencoded({ extended: false }),
-    express.json()
+    express.json(),
+    cors()
 ]);
 
 /************************************
