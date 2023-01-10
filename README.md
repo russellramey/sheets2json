@@ -1,20 +1,11 @@
 # Sheets2Json
 Simple application that provides a read-only REST endpoint for any publicly accessible Google Sheet, .xlsx/.xls, or .csv document. This api will attempt to return the provided Sheet data in structured JSON. Pass in any remote document or Google Sheet url and recieve a structured JSON response.
 
-## Requirements 
-- Node
-- Docker
-
-## Setup
-- Clone repository & move to repo directory
-- Run `npm install`
-- Run `docker compose up`
-
 ## Documentation
 This api servie consists of a single supported endpoint and is read-only. You can pass in specific query parameters that can be used to modify the JSON responses, for example adding custom `headers` (column names or keys) to override the remote documents. You can also us `order` and `orderby` to sort the JSON object in the response.  Lastly, for documents that have multiple workbooks/sheets, you can pass in a `sheet` parameter and the name of the desired Sheet to return. By default the first sheet in the document will always be returned.
 
 ### Endpoint
-`{domain}/v1/doc/?url=REMOTE_DOC_URL`
+`https://api.sheets2json.com/v1/doc/?url=REMOTE_DOC_URL`
 
 Make a GET request to this endpoint where `url` is a valid publicly accessible xlsx, xls, csv, or Google Sheet link. The  `url` parameter is the only required parameter that needs to be present on every request. Additional supported query parameters can be found below, and can be used to customize or mutate the response from the api.
 
@@ -94,3 +85,12 @@ Returns JSON array of rows in the document. Each item in the array is an array w
 
 ## Disclaimer
 This service requires the target spreadsheet documents to be publicly accessible, meaning the data contained within the document could be exposed to the internet without requiring user authentication to access. If you want to keep the document data private, __DO NOT USE__ it with this service. A future version may include a way to pass in API keys or basic HTTP auth with each request.
+
+## Requirements 
+- Node
+- Docker
+
+## Setup
+- Clone repository & move to repo directory
+- Run `npm install`
+- Run `docker compose up`
