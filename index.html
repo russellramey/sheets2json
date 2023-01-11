@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8" />
+        <title>Docs | Sheets2Json</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
+    </head>
+    <body>
+        <div id="header">
+          <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container">
+              <a class="navbar-brand" href="#"><b>Sheets2JSON</b></a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#documentation">Documentation</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <div id="hero" class="bg-dark text-white" style="padding: 5% 0;">
+          <div class="container">
+            <div class="row py-4">
+              <div class="col text-center">
+                <h1>Easily get contents of remote spreadsheets as JSON</h1>
+                <h2 class="fs-4 mb-4 pb-2"><i>Free API service to read data from remote spreadsheet urls, and Google Sheets</i></h2>
+                <p><a href="#documentation" class="btn-lg btn btn-primary">Read Documentation</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="about" class="py-4">
+          <div class="container" style="padding:2.5% 1rem;">
+            <div class="card bg-light p-4">
+              <h3>What is <b>Sheets2JSON</b></h3>
+              <p class="fs-5">
+                Sheets2JSON is a simple service that provides a read-only REST endpoint for any publicly accessible Google Sheet, .xlsx/.xls, or .csv document. This api will attempt to return the provided Sheet data in structured JSON. Pass in any remote document or Google Sheet url and recieve a structured JSON response.
+              </p>
+            </div>
+            <br>
+            <h3 class="text-center">How it works</h3>
+            <br>
+            <div class="row text-center">
+              <div class="col-md-4 mb-3">
+                <div class="card">
+                  <div class="card-body">
+                    <img src="https://api.mdisvg.com/v2/i/file-document-outline" width="auto" height="auto" class="p-4"/>
+                    <h4>1. Document URL</h4>
+                    <p>Obtain a link to any pubilc .xlsx/.xls, .csv, or Google Sheet</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="card">
+                  <div class="card-body">
+                    <img src="https://api.mdisvg.com/v2/i/web" width="auto" height="auto" class="p-4"/>
+                    <h4>2. Make GET Request</h4>
+                    <p>Make a GET request and pass the public url to the Sheets2Json endpoint as the <code>url</code> parameter</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <img src="https://api.mdisvg.com/v2/i/code-json" width="auto" height="auto" class="p-4"/>
+                    <h4>3. JSON Response</h4>
+                    <p>Recieve a structured JSON response with the target sheet row values as an array</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="documentation">
+          <div class="container" style="padding:2.5% 1rem; padding-top: 0;">
+            <h2>Documentation</h2>
+            <p>This API service consists of a single supported endpoint and is read-only. You can pass in specific query parameters that can be used to modify the JSON responses, for example adding custom <code>headers</code> (column names or keys) to override the remote documents. You can also use <code>order</code> and <code>orderby</code> to sort the JSON object in the response.  Lastly, for documents that have multiple workbooks/sheets, you can pass in a <code>sheet</code> parameter and the name of the desired Sheet to return. By default the first sheet in the document will always be returned.</p>
+            <br>
+            <h4>Endpoint</h4>
+            <p>There is only one single supported endpoint:</p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <code>https://api.sheets2json.com/v1/doc/?url=REMOTE_DOC_URL</code>
+              </div>
+            </div>
+            <p>Make a GET request to this endpoint where <code>url</code> is a valid publicly accessible xlsx, xls, csv, or Google Sheet link. The <code>url</code> parameter is the only required parameter that needs to be present on every request. Additional supported query parameters can be found below, and can be used to customize or mutate the response from the API.</p>
+            <p>Below are two examples for what the API would be expecting for the <code>url</code> parameter:</p>
+            <ul>
+              <li>Self-Hosted CSV: <code>https://yourdomain.com/path/to/file.csv</code></li>
+              <li>Self-Hosted XLS: <code>https://yourdomain.com/path/to/file.xlsx</code></li>
+              <li>Google Doc: <code>https://docs.google.com/spreadsheets/d/SHEET_ID_WILL_BE_HERE/edit</code></li>
+            </ul>
+            <br>
+            <h4>Supported Parameters</h4>
+            <p>There are five(5) supported query parameters for the above endpoint:</p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Parameter</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Required</th>
+                      <th scope="col">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>url</code></td>
+                      <td>String</td>
+                      <td>Yes</td>
+                      <td>Full url to document (see above for examples).</td>
+                    </tr>
+                    <tr>
+                      <td><code>headers</code></td>
+                      <td>Boolean | String</td>
+                      <td>No</td>
+                      <td>Can be a boolean (<code>1</code>), or list of keywords sperated by a comma (<code>key1,key2,key3, ...</code>). This option will let you customize the JSON keys without the need to update the remote document. Any spaces or hypens in the keywords will be automatically replaced with underscores (<code> _ </code>). Setting <code>headers</code> to <code>1</code> will use the first item in the array as the keys for all other items.</td>
+                    </tr>
+                    <tr>
+                      <td><code>orderby</code></td>
+                      <td>String</td>
+                      <td>No</td>
+                      <td>Sort resulting data array by speficic object key.</td>
+                    </tr>
+                    <tr>
+                      <td><code>order</code></td>
+                      <td>String</td>
+                      <td>No</td>
+                      <td>Supports <code>asc</code>(<i>default</i>) and <code>desc</code> values. Order results in ascending or descending order.</td>
+                    </tr>
+                    <tr>
+                      <td><code>sheet</code></td>
+                      <td>String</td>
+                      <td>No</td>
+                      <td>Sheet name of desired worksheet in the document. If no <code>sheet</code> specified, the first sheet in the document will be used.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br>
+            <h4>Examples</h4>
+            <p>Below are a few examples of how to interact with the API and what to expect as a response. All examples are using the same Google Sheet as the data source: <code>https://docs.google.com/spreadsheets/d/15g64-KCC94m0PMlZJevaoUB84a71zIlVaVIhcD-Ey-4/edit</code>.</p>
+            <script src="https://gist.github.com/russellramey/c2d035e16d2d88048b7ca42b8d90e076.js"></script>
+          </div>
+        </div>
+
+        <div id="contact" class="bg-dark py-4">
+          <div class="container text-white">
+            <div class="row" data-aos="zoom-in">
+              <div class="col-lg-9 text-center text-lg-start">
+                <h3>Issues, bugs, or feature requests</h3>
+                <p>For any issues/bugs you may come accross, or to simply suggest a new feature, you can create an issue on the offical Github Repo.</p>
+              </div>
+              <div class="col-lg-3 text-end">
+                <a class="btn btn-light btn-lg" href="https://github.com/russellramey/sheets2json" target="_blank">Github Repo</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
