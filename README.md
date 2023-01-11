@@ -2,7 +2,9 @@
 Simple application that provides a read-only REST endpoint for any publicly accessible Google Sheet, .xlsx/.xls, or .csv document. This api will attempt to return the provided Sheet data in structured JSON. Pass in any remote document or Google Sheet url and recieve a structured JSON response.
 
 ## Documentation
-This api servie consists of a single supported endpoint and is read-only. You can pass in specific query parameters that can be used to modify the JSON responses, for example adding custom `headers` (column names or keys) to override the remote documents. You can also us `order` and `orderby` to sort the JSON object in the response.  Lastly, for documents that have multiple workbooks/sheets, you can pass in a `sheet` parameter and the name of the desired Sheet to return. By default the first sheet in the document will always be returned.
+See [sheets2json.com](https://www.sheets2json.com) for more information and examples.
+
+This api service consists of a single supported endpoint and is read-only. You can pass in specific query parameters that can be used to modify the JSON responses, for example adding custom `headers` (column names or keys) to override the remote documents. You can also us `order` and `orderby` to sort the JSON object in the response.  Lastly, for documents that have multiple workbooks/sheets, you can pass in a `sheet` parameter and the name of the desired Sheet to return. By default the first sheet in the document will always be returned.
 
 ### Endpoint
 `https://api.sheets2json.com/v1/doc/?url=REMOTE_DOC_URL`
